@@ -156,6 +156,7 @@ app.get('/api', (req, res) => {
 
 app.get('/api/rating/:score', (req, res) => {
     const score = Number(req.params.score)
+    if (!score) {res.json(games); return} // Just list everything if zero or not a number
     let result = {}
     for (let game in games) {
         if (games[game]['metacritic'] >= score) {
@@ -170,6 +171,18 @@ app.get('/api/platform/:platform', (req, res) => {
     let result = {}
     for (let game in games) {
         if (games[game][platform]) {
+            result[game] = games[game]
+        }
+    }
+    res.json(result)
+})
+
+app.get('/api/release/:year', (req, res) => {
+    const year = Number(req.params.year)
+    if (!year) {res.json(games); return} // Just list everything if zero or not a number
+    let result = {}
+    for (let game in games) {
+        if (games[game]['release'] >= year) {
             result[game] = games[game]
         }
     }
